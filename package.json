@@ -1,0 +1,20 @@
+{
+  "name": "devfest-certificate-system",
+  "version": "1.0.0",
+  "description": "DevFest Ado-Ekiti 2025 Volunteer Certificate System",
+  "scripts": {
+    "install:all": "npm install && cd frontend && npm install && cd ../backend && npm install",
+    "dev": "concurrently \"npm run dev:frontend\" \"npm run dev:backend\"",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:backend": "cd backend && npm run dev",
+    "build": "npm run build:frontend && npm run build:backend",
+    "build:frontend": "cd frontend && npm run build",
+    "build:backend": "cd backend && npm run build"
+  },
+  "keywords": ["devfest", "certificate", "gdg"],
+  "author": "GDG Ado-Ekiti",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
