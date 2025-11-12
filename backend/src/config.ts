@@ -10,7 +10,7 @@ interface Config {
     user: string;
     password: string;
   };
-  corsOrigin: string;
+  corsOrigins: string[];
   storage: {
     type: 'local' | 'cloud';
     path: string;
@@ -35,7 +35,10 @@ export const config: Config = {
     user: process.env.EMAIL_USER || '',
     password: process.env.EMAIL_PASS || ''
   },
-  corsOrigin: process.env.CORS_ORIGIN || 'http://localhost:3000',
+  // Support multiple CORS origins (comma-separated)
+  corsOrigins: process.env.CORS_ORIGINS
+    ? process.env.CORS_ORIGINS.split(',').map(origin => origin.trim())
+    : ['http://localhost:3000', 'https://devfestcert.web.app', 'https://cert.gdgadoekiti.com'],
   storage: {
     type: (process.env.STORAGE_TYPE as 'local' | 'cloud') || 'local',
     path: process.env.STORAGE_PATH || './uploads'

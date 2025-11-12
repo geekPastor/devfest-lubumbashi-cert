@@ -11,10 +11,23 @@ const app = express();
 
 // Middleware
 app.use(express.json());
+
+// CORS - Allow configured origins
 app.use(cors({
-  origin: config.corsOrigin,
-  credentials: true,
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps, Postman, or server-to-server)
+    if (!origin) return callback(null, true);
+
+    // Check if origin is in allowed list
+    if (config.corsOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(null, false);
+    }
+  },
+  credentials: true
 }));
+
 app.use(rateLimiter);
 
 // Serve static certificates with CORS headers
