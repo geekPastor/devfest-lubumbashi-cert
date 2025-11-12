@@ -4,7 +4,8 @@ import { EmailVerificationForm } from '../components/EmailVerificationForm';
 import { CodeVerificationForm } from '../components/CodeVerificationForm';
 import { NameConfirmationForm } from '../components/NameConfirmationForm';
 import { CertificateDisplay } from '../components/CertificateDisplay';
-import { verifyEmail, verifyCode, generateCertificate } from '../services/api';
+import { Footer } from '../components/Footer';
+import { verifyEmail, verifyCode, generateCertificate, shareToLinkedIn } from '../services/api';
 import { Certificate } from '../types';
 
 const steps = [
@@ -20,6 +21,7 @@ export const CertificateFlow: React.FC = () => {
   const [verifiedName, setVerifiedName] = useState('');
   const [certificate, setCertificate] = useState<Certificate | null>(null);
   const [certificateAlreadyExists, setCertificateAlreadyExists] = useState(false);
+  const [linkedInDetails, setLinkedInDetails] = useState<any>(null);
 
   const handleEmailSubmit = async (email: string) => {
     try {
@@ -132,10 +134,27 @@ export const CertificateFlow: React.FC = () => {
     }
   };
 
-  const handleShareLinkedIn = () => {
+  const handleShareLinkedIn = async () => {
     if (certificate) {
-      // LinkedIn sharing logic will be implemented
-      window.open(`https://www.linkedin.com/profile/add?startTask=CERTIFICATION_NAME&name=${encodeURIComponent('DevFest Ado-Ekiti 2025 - Volunteer')}&organizationId=123&certId=${certificate.certificateId}&certUrl=${encodeURIComponent(certificate.verificationUrl)}`, '_blank');
+      try {
+        // Call backend API to get LinkedIn URLs
+        const response = await shareToLinkedIn(certificate.certificateId);
+        if (response.success && response.data) {
+          // Save details to show in alert
+          setLinkedInDetails(response.data.certificateDetails);
+
+          // Copy credential URL to clipboard for easy pasting
+          await navigator.clipboard.writeText(response.data.certificateDetails.credentialUrl);
+
+          // Open LinkedIn certifications page where user can manually add the certificate
+          window.open(response.data.addToProfileUrl, '_blank', 'width=900,height=700');
+        }
+      } catch (error) {
+        console.error('Error sharing to LinkedIn:', error);
+        // Fallback to sharing verification link as post if API fails
+        const shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(certificate.verificationUrl)}`;
+        window.open(shareUrl, '_blank', 'width=600,height=600');
+      }
     }
   };
 
@@ -178,7 +197,7 @@ export const CertificateFlow: React.FC = () => {
               fontSize: { xs: '1rem', sm: '1.25rem' }
             }}
           >
-            Certificate of Appreciation for Volunteers
+            Certificate of Appreciation for Volunteers and Speakers
           </Typography>
           <Typography
             variant="body1"
@@ -242,6 +261,26 @@ export const CertificateFlow: React.FC = () => {
               </Alert>
             </Box>
           )}
+          {linkedInDetails && (
+            <Box sx={{ mb: 3 }}>
+              <Alert
+                severity="success"
+                onClose={() => setLinkedInDetails(null)}
+              >
+                <strong>LinkedIn Certification Page Opened!</strong>
+                <Typography variant="body2" sx={{ mt: 1, mb: 1 }}>
+                  Your credential URL has been copied to clipboard. Please manually add this certification with the following details:
+                </Typography>
+                <Typography variant="body2" component="div" sx={{ mt: 1 }}>
+                  <strong>Name:</strong> {linkedInDetails.name}<br />
+                  <strong>Organization:</strong> {linkedInDetails.organization}<br />
+                  <strong>Issue Date:</strong> {linkedInDetails.issueDate}<br />
+                  <strong>Credential ID:</strong> {linkedInDetails.certificateId}<br />
+                  <strong>Credential URL:</strong> {linkedInDetails.credentialUrl}
+                </Typography>
+              </Alert>
+            </Box>
+          )}
           <CertificateDisplay
             certificate={certificate}
             onDownload={handleDownload}
@@ -252,6 +291,7 @@ export const CertificateFlow: React.FC = () => {
       )}
         </Box>
       </Container>
+      <Footer />
     </Box>
   );
 };

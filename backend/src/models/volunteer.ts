@@ -7,8 +7,18 @@ class VolunteerModel {
   async findOne(filter: Partial<IVolunteer>): Promise<IVolunteer | null> {
     const snapshot = await this.collection.where('email', '==', filter.email).get();
     if (snapshot.empty) return null;
-    
+
     const doc = snapshot.docs[0];
+    return {
+      id: doc.id,
+      ...doc.data() as IVolunteer
+    };
+  }
+
+  async findById(id: string): Promise<IVolunteer | null> {
+    const doc = await this.collection.doc(id).get();
+    if (!doc.exists) return null;
+
     return {
       id: doc.id,
       ...doc.data() as IVolunteer

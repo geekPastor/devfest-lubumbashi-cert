@@ -19,26 +19,26 @@ class CertificateService {
         <rect width="100%" height="100%" fill="transparent" />
 
         <!-- Certificate title -->
-        <text x="50%" y="300" text-anchor="middle" font-family="Arial, sans-serif" font-size="52" fill="#000000" font-weight="700">Certificate of Appreciation</text>
+        <text x="50%" y="300" text-anchor="middle" font-family="sans-serif" font-size="52" fill="#000000" font-weight="700">Certificate of Appreciation</text>
 
         <!-- "This is to certify that" -->
-        <text x="50%" y="420" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" fill="#000000">This is to certify that</text>
+        <text x="50%" y="420" text-anchor="middle" font-family="sans-serif" font-size="28" fill="#000000">This is to certify that</text>
 
         <!-- Volunteer name - Large and bold -->
-        <text x="50%" y="550" text-anchor="middle" font-family="Arial, sans-serif" font-size="88" fill="#000000" font-weight="900">${sanitizedName}</text>
+        <text x="50%" y="550" text-anchor="middle" font-family="sans-serif" font-size="88" fill="#000000" font-weight="900">${sanitizedName}</text>
 
         <!-- Body text -->
-        <text x="50%" y="650" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#000000">Has volunteered at <tspan font-weight="700">DevFest Ado-Ekiti 2025</tspan> and contributed to</text>
-        <text x="50%" y="690" text-anchor="middle" font-family="Arial, sans-serif" font-size="24" fill="#000000">making the event a success</text>
+        <text x="50%" y="650" text-anchor="middle" font-family="sans-serif" font-size="24" fill="#000000">Has volunteered at <tspan font-weight="700">DevFest Ado-Ekiti 2025</tspan> and contributed to</text>
+        <text x="50%" y="690" text-anchor="middle" font-family="sans-serif" font-size="24" fill="#000000">making the event a success</text>
 
         <!-- Signature section -->
-        <text x="180" y="915" font-family="Arial, sans-serif" font-size="26" fill="#000000" font-weight="700">David Oluwabusayo</text>
-        <text x="180" y="945" font-family="Arial, sans-serif" font-size="20" fill="#000000">Lead Organizer</text>
+        <text x="180" y="915" font-family="sans-serif" font-size="26" fill="#000000" font-weight="700">David Oluwabusayo</text>
+        <text x="180" y="945" font-family="sans-serif" font-size="20" fill="#000000">Lead Organizer</text>
 
         <!-- Footer: issuer, id, date -->
-        <text x="180" y="1015" font-family="Arial, sans-serif" font-size="20" fill="#000000">Issued by: GDG Ado-Ekiti</text>
-        <text x="874" y="1015" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" fill="#000000">Certificate ID: ${certificateId}</text>
-        <text x="1568" y="1015" text-anchor="end" font-family="Arial, sans-serif" font-size="20" fill="#000000">Issued date: ${issueDate}</text>
+        <text x="180" y="1015" font-family="sans-serif" font-size="20" fill="#000000">Issued by: GDG Ado-Ekiti</text>
+        <text x="874" y="1015" text-anchor="middle" font-family="sans-serif" font-size="20" fill="#000000">Certificate ID: ${certificateId}</text>
+        <text x="1568" y="1015" text-anchor="end" font-family="sans-serif" font-size="20" fill="#000000">Issued date: ${issueDate}</text>
       </svg>
     `;
 
@@ -81,26 +81,26 @@ class CertificateService {
         <rect x="724" y="270" width="300" height="3" fill="url(#accentGradient)" rx="1.5"/>
 
         <!-- Certificate title -->
-        <text x="50%" y="300" text-anchor="middle" font-family="Arial, sans-serif" font-size="52" fill="#000000" font-weight="700">Certificate of Appreciation</text>
+        <text x="50%" y="300" text-anchor="middle" font-family="sans-serif" font-size="52" fill="#000000" font-weight="700">Certificate of Appreciation</text>
 
         <!-- "This is to certify that" -->
-        <text x="50%" y="420" text-anchor="middle" font-family="Arial, sans-serif" font-size="28" fill="#333333" font-style="italic">This is to certify that</text>
+        <text x="50%" y="420" text-anchor="middle" font-family="sans-serif" font-size="28" fill="#333333" font-style="italic">This is to certify that</text>
 
         <!-- Speaker name - Large and bold with shadow -->
-        <text x="50%" y="550" text-anchor="middle" font-family="Arial, sans-serif" font-size="88" fill="#000000" font-weight="900" filter="url(#nameShadow)">${sanitizedName}</text>
+        <text x="50%" y="550" text-anchor="middle" font-family="sans-serif" font-size="88" fill="#000000" font-weight="900" filter="url(#nameShadow)">${sanitizedName}</text>
 
         <!-- Body text - comes BEFORE icons -->
-        <text x="50%" y="650" text-anchor="middle" font-family="Arial, sans-serif" font-size="26" fill="#1a1a1a">Has shared their expertise at <tspan font-weight="700" fill="#4285F4">DevFest Ado-Ekiti 2025</tspan> and</text>
-        <text x="50%" y="690" text-anchor="middle" font-family="Arial, sans-serif" font-size="26" fill="#1a1a1a">contributed to making the event a success</text>
+        <text x="50%" y="650" text-anchor="middle" font-family="sans-serif" font-size="26" fill="#1a1a1a">Has shared their expertise at <tspan font-weight="700" fill="#4285F4">DevFest Ado-Ekiti 2025</tspan> and</text>
+        <text x="50%" y="690" text-anchor="middle" font-family="sans-serif" font-size="26" fill="#1a1a1a">contributed to making the event a success</text>
 
         <!-- Signature section -->
-        <text x="180" y="915" font-family="Arial, sans-serif" font-size="26" fill="#000000" font-weight="700">David Oluwabusayo</text>
-        <text x="180" y="945" font-family="Arial, sans-serif" font-size="20" fill="#666666">Lead Organizer</text>
+        <text x="180" y="915" font-family="sans-serif" font-size="26" fill="#000000" font-weight="700">David Oluwabusayo</text>
+        <text x="180" y="945" font-family="sans-serif" font-size="20" fill="#666666">Lead Organizer</text>
 
         <!-- Footer: issuer, id, date -->
-        <text x="180" y="1015" font-family="Arial, sans-serif" font-size="20" fill="#666666">Issued by: GDG Ado-Ekiti</text>
-        <text x="874" y="1015" text-anchor="middle" font-family="Arial, sans-serif" font-size="20" fill="#666666">Certificate ID: ${certificateId}</text>
-        <text x="1568" y="1015" text-anchor="end" font-family="Arial, sans-serif" font-size="20" fill="#666666">Issued date: ${issueDate}</text>
+        <text x="180" y="1015" font-family="sans-serif" font-size="20" fill="#666666">Issued by: GDG Ado-Ekiti</text>
+        <text x="874" y="1015" text-anchor="middle" font-family="sans-serif" font-size="20" fill="#666666">Certificate ID: ${certificateId}</text>
+        <text x="1568" y="1015" text-anchor="end" font-family="sans-serif" font-size="20" fill="#666666">Issued date: ${issueDate}</text>
       </svg>
     `;
 

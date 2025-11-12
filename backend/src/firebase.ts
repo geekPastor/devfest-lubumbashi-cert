@@ -10,8 +10,10 @@ if (!admin.apps.length) {
       privateKey: config.firebase.privateKey.replace(/\\n/g, '\n'),
     }),
     databaseURL: `https://${config.firebase.projectId}.firebaseio.com`,
+    storageBucket: process.env.STORAGE_BUCKET || 'devfestcert.firebasestorage.app',
   });
 }
 
 export const db = admin.firestore();
 export const auth = admin.auth();
+export const storage = admin.storage();

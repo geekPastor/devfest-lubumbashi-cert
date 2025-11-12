@@ -176,14 +176,29 @@ export const shareToLinkedIn = async (req: Request, res: Response) => {
       });
     }
 
-    // In a real application, we would integrate with LinkedIn's API here
-    // For now, we'll return the sharing URL
-    const shareUrl = `https://www.linkedin.com/profile/add?startTask=CERTIFICATION_NAME&name=${encodeURIComponent('DevFest Ado-Ekiti 2025 - Volunteer')}&organizationId=123&certId=${certificateId}&certUrl=${encodeURIComponent(certificate.verificationUrl)}`;
+    // Get volunteer information to determine type
+    const volunteer = await Volunteer.findById(certificate.volunteerId);
+    const volunteerType = volunteer?.type || 'volunteer';
+
+    // Create appropriate certificate name based on type
+    const certificateName = volunteerType === 'speaker'
+      ? 'DevFest Ado-Ekiti 2025 - Speaker'
+      : 'DevFest Ado-Ekiti 2025 - Volunteer';
+
+    // Try the profile/add URL format with organization ID - this may work for adding to profile
+    const addToProfileUrl = `https://www.linkedin.com/profile/add?startTask=CERTIFICATION_NAME&name=${encodeURIComponent(certificateName)}&organizationId=100054142&issueYear=2025&issueMonth=1&certId=${certificateId}&certUrl=${encodeURIComponent(certificate.verificationUrl)}`;
 
     res.status(200).json({
       success: true,
       data: {
-        shareUrl
+        addToProfileUrl,
+        certificateDetails: {
+          name: certificateName,
+          organization: 'GDG Ado-Ekiti',
+          issueDate: 'January 2025',
+          certificateId: certificateId,
+          credentialUrl: certificate.verificationUrl
+        }
       }
     });
   } catch (error) {

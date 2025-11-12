@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { verifyCertificate } from '../services/api';
 import { Certificate } from '../types';
+import { Footer } from '../components/Footer';
 
 export const VerificationPage: React.FC = () => {
   const { certificateId } = useParams<{ certificateId: string }>();
@@ -59,6 +60,7 @@ export const VerificationPage: React.FC = () => {
             </Typography>
           </Box>
         </Container>
+        <Footer />
       </Box>
     );
   }
@@ -156,6 +158,7 @@ export const VerificationPage: React.FC = () => {
           </Box>
         </Box>
       </Container>
+      <Footer />
     </Box>
   );
 };

@@ -1,0 +1,30 @@
+# Node dependencies
+node_modules/
+npm-debug.log
+
+# Environment files
+.env
+.env.*
+
+# Build outputs
+dist/
+
+# Test files
+test-output/
+output.png
+*.log
+
+# Uploads
+uploads/*.png
+uploads/*.pdf
+uploads/
+
+# Git and configs
+.git
+.gitignore
+.dockerignore
+render.yaml
+
+# Windows special files
+nul
+Thumbs.db
