@@ -33,3 +33,4 @@ test-*.csv
 backend/output.png
 backend/nul
 nul
+mongodb.msi
