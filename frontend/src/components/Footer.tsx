@@ -34,7 +34,7 @@ export const Footer: React.FC = () => {
           rel="noopener noreferrer"
           sx={{ color: '#4285F4', textDecoration: 'none', '&:hover': { textDecoration: 'underline' } }}
         >
-          GDG Ado-Ekiti
+          GDG Ado-Ekiti 
         </Link>
       </Typography>
       <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
@@ -50,6 +50,8 @@ export const Footer: React.FC = () => {
             gap: 0.5,
             '&:hover': { textDecoration: 'underline' }
           }}
+
+          
         >
           <GitHubIcon sx={{ fontSize: 18 }} />
           Open Source
