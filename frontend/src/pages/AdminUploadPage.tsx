@@ -10,9 +10,14 @@ import {
   Chip,
   Card,
   CardContent,
-  Grid
+  Grid,
+  AppBar,
+  Toolbar
 } from '@mui/material';
-import { CloudUpload, CheckCircle, Error as ErrorIcon } from '@mui/icons-material';
+import { CloudUpload, CheckCircle, Error as ErrorIcon, Logout } from '@mui/icons-material';
+import { signOut } from 'firebase/auth';
+import { auth } from '../firebase';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
@@ -38,17 +43,54 @@ export const AdminUploadPage: React.FC = () => {
   const [result, setResult] = useState<UploadResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [stats, setStats] = useState<Stats | null>(null);
+  const [loadingStats, setLoadingStats] = useState(true);
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     fetchStats();
   }, []);
 
+  const getAuthToken = async () => {
+    if (!auth?.currentUser) {
+      throw new Error('Not authenticated');
+    }
+    return await auth.currentUser.getIdToken();
+  };
+
   const fetchStats = async () => {
+    setLoadingStats(true);
     try {
-      const response = await axios.get(`${API_URL}/api/admin/stats`);
+      const token = await getAuthToken();
+      console.log('Fetching stats with token...');
+      const response = await axios.get(`${API_URL}/api/admin/stats`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      console.log('Stats response:', response.data);
       setStats(response.data.data);
     } catch (err) {
       console.error('Error fetching stats:', err);
+      if (axios.isAxiosError(err)) {
+        console.error('Response status:', err.response?.status);
+        console.error('Response data:', err.response?.data);
+        if (err.response?.status === 401) {
+          setError('Authentication failed. Please log in again.');
+        }
+      }
+    } finally {
+      setLoadingStats(false);
+    }
+  };
+
+  const handleLogout = async () => {
+    try {
+      if (auth) {
+        await signOut(auth);
+        navigate('/admin/login');
+      }
+    } catch (err) {
+      console.error('Error logging out:', err);
     }
   };
 
@@ -74,9 +116,11 @@ export const AdminUploadPage: React.FC = () => {
     formData.append('file', file);
 
     try {
+      const token = await getAuthToken();
       const response = await axios.post(`${API_URL}/api/admin/upload-volunteers`, formData, {
         headers: {
-          'Content-Type': 'multipart/form-data'
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`
         }
       });
 
@@ -85,7 +129,11 @@ export const AdminUploadPage: React.FC = () => {
       // Refresh stats
       await fetchStats();
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Error uploading file');
+      if (axios.isAxiosError(err) && err.response?.status === 401) {
+        setError('Authentication failed. Please log in again.');
+      } else {
+        setError(err.response?.data?.error || 'Error uploading file');
+      }
     } finally {
       setUploading(false);
     }
@@ -106,6 +154,23 @@ export const AdminUploadPage: React.FC = () => {
 
   return (
     <Box sx={{ minHeight: '100vh', bgcolor: '#f5f5f5' }}>
+      {/* Top Navigation Bar */}
+      <AppBar position="static" elevation={0}>
+        <Toolbar>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            DevFest Admin
+          </Typography>
+          <Button
+            color="inherit"
+            startIcon={<Logout />}
+            onClick={handleLogout}
+            sx={{ textTransform: 'none' }}
+          >
+            Logout
+          </Button>
+        </Toolbar>
+      </AppBar>
+
       {/* Header */}
       <Box
         sx={{
@@ -143,50 +208,58 @@ export const AdminUploadPage: React.FC = () => {
 
       <Container maxWidth="md" sx={{ pb: 6 }}>
         {/* Statistics */}
-        {stats && (
-          <Grid container spacing={2} sx={{ mb: 4 }}>
-            <Grid item xs={6} sm={4}>
-              <Card>
-                <CardContent sx={{ textAlign: 'center' }}>
-                  <Typography variant="h4" color="primary">{stats.total}</Typography>
-                  <Typography variant="body2" color="text.secondary">Total</Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-            <Grid item xs={6} sm={4}>
-              <Card>
-                <CardContent sx={{ textAlign: 'center' }}>
-                  <Typography variant="h4" color="success.main">{stats.volunteers}</Typography>
-                  <Typography variant="body2" color="text.secondary">Volunteers</Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-            <Grid item xs={6} sm={4}>
-              <Card>
-                <CardContent sx={{ textAlign: 'center' }}>
-                  <Typography variant="h4" color="warning.main">{stats.speakers}</Typography>
-                  <Typography variant="body2" color="text.secondary">Speakers</Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-            <Grid item xs={6} sm={4}>
-              <Card>
-                <CardContent sx={{ textAlign: 'center' }}>
-                  <Typography variant="h4" color="info.main">{stats.certified}</Typography>
-                  <Typography variant="body2" color="text.secondary">Certified</Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-            <Grid item xs={6} sm={4}>
-              <Card>
-                <CardContent sx={{ textAlign: 'center' }}>
-                  <Typography variant="h4" color="text.secondary">{stats.pending}</Typography>
-                  <Typography variant="body2" color="text.secondary">Pending</Typography>
-                </CardContent>
-              </Card>
-            </Grid>
+        <Grid container spacing={2} sx={{ mb: 4 }}>
+          <Grid item xs={6} sm={4}>
+            <Card>
+              <CardContent sx={{ textAlign: 'center' }}>
+                <Typography variant="h4" color="primary">
+                  {loadingStats ? '...' : stats?.total || 0}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">Total</Typography>
+              </CardContent>
+            </Card>
           </Grid>
-        )}
+          <Grid item xs={6} sm={4}>
+            <Card>
+              <CardContent sx={{ textAlign: 'center' }}>
+                <Typography variant="h4" color="success.main">
+                  {loadingStats ? '...' : stats?.volunteers || 0}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">Volunteers</Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item xs={6} sm={4}>
+            <Card>
+              <CardContent sx={{ textAlign: 'center' }}>
+                <Typography variant="h4" color="warning.main">
+                  {loadingStats ? '...' : stats?.speakers || 0}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">Speakers</Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item xs={6} sm={4}>
+            <Card>
+              <CardContent sx={{ textAlign: 'center' }}>
+                <Typography variant="h4" color="info.main">
+                  {loadingStats ? '...' : stats?.certified || 0}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">Certified</Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item xs={6} sm={4}>
+            <Card>
+              <CardContent sx={{ textAlign: 'center' }}>
+                <Typography variant="h4" color="text.secondary">
+                  {loadingStats ? '...' : stats?.pending || 0}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">Pending</Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+        </Grid>
 
         {/* Upload Section */}
         <Paper sx={{ p: { xs: 2, sm: 3, md: 4 }, mb: 3 }}>

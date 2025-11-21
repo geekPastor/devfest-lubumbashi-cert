@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import multer from 'multer';
 import { uploadVolunteers, getVolunteersStats } from '../controllers/admin.controller';
+import { isAuthenticated, isAdmin } from '../middleware/auth.middleware';
 
 const router = Router();
 
@@ -21,9 +22,9 @@ const upload = multer({
 });
 
 // Upload volunteers from CSV
-router.post('/upload-volunteers', upload.single('file'), uploadVolunteers);
+router.post('/upload-volunteers', isAuthenticated, isAdmin, upload.single('file'), uploadVolunteers);
 
 // Get volunteers statistics
-router.get('/stats', getVolunteersStats);
+router.get('/stats', isAuthenticated, isAdmin, getVolunteersStats);
 
 export default router;

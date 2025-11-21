@@ -10,7 +10,8 @@
     "test": "jest",
     "seed": "ts-node src/scripts/seed-volunteers.ts",
     "clean-db": "ts-node src/scripts/clean-database.ts",
-    "upload-csv": "ts-node src/scripts/upload-csv.ts"
+    "upload-csv": "ts-node src/scripts/upload-csv.ts",
+    "create-admin": "ts-node src/scripts/create-admin.ts"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

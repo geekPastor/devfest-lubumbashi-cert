@@ -95,8 +95,8 @@ export const generateCertificate = async (req: Request, res: Response) => {
       });
     }
 
-    // Send email with certificate
-    await emailService.sendCertificateEmail(email, imageUrl, verificationUrl);
+    // Send email with certificate (include name and type for personalization)
+    await emailService.sendCertificateEmail(email, imageUrl, verificationUrl, name, volunteerType);
 
     // Serialize certificate data with proper date formatting
     const serializedCertificate = {
@@ -186,7 +186,7 @@ export const shareToLinkedIn = async (req: Request, res: Response) => {
       : 'DevFest Ado-Ekiti 2025 - Volunteer';
 
     // Try the profile/add URL format with organization ID - this may work for adding to profile
-    const addToProfileUrl = `https://www.linkedin.com/profile/add?startTask=CERTIFICATION_NAME&name=${encodeURIComponent(certificateName)}&organizationId=100054142&issueYear=2025&issueMonth=1&certId=${certificateId}&certUrl=${encodeURIComponent(certificate.verificationUrl)}`;
+    const addToProfileUrl = `https://www.linkedin.com/profile/add?startTask=CERTIFICATION_NAME&name=${encodeURIComponent(certificateName)}&organizationId=100054142&issueYear=2025&issueMonth=11&certId=${certificateId}&certUrl=${encodeURIComponent(certificate.verificationUrl)}`;
 
     res.status(200).json({
       success: true,
@@ -195,7 +195,7 @@ export const shareToLinkedIn = async (req: Request, res: Response) => {
         certificateDetails: {
           name: certificateName,
           organization: 'GDG Ado-Ekiti',
-          issueDate: 'January 2025',
+          issueDate: 'November 2025',
           certificateId: certificateId,
           credentialUrl: certificate.verificationUrl
         }
