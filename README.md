@@ -24,6 +24,8 @@ The DevFest Certificate System is a comprehensive web application that allows vo
 - **Public Verification**: Each certificate includes a unique verification link
 
 ### For Administrators
+- **Firebase Authentication**: Admin routes protected with Firebase Authentication
+- **Role-Based Access Control**: Admin-only access using custom claims
 - **Bulk Upload**: Upload volunteer/speaker lists via CSV
 - **Certificate Management**: Track all issued certificates
 - **Database Cleanup**: Tools to manage volunteer data
@@ -33,6 +35,7 @@ The DevFest Certificate System is a comprehensive web application that allows vo
 - **One-time Verification Codes**: 6-digit codes expire after 15 minutes
 - **Unique Certificate IDs**: Each certificate has a unique identifier (e.g., DFAE2025-VOL-0001)
 - **Public Verification**: Anyone can verify certificate authenticity
+- **Admin Authentication**: Firebase Authentication with role-based access control for admin routes
 
 ## 🏗️ Project Structure
 
@@ -82,6 +85,12 @@ certification/
 
 3. **Set up environment variables**
 
+   Copy the example environment files and fill in your credentials:
+   ```bash
+   cp backend/.env.example backend/.env
+   cp frontend/.env.example frontend/.env
+   ```
+
    **Backend** (`backend/.env`):
    ```env
    PORT=5000
@@ -108,9 +117,17 @@ certification/
    CORS_ORIGIN=http://localhost:3000
    ```
 
-   **Frontend** (`frontend/.env.production`):
+   **Frontend** (`frontend/.env.production` and `frontend/.env`):
    ```env
    VITE_API_URL=https://your-backend-url.com
+
+   # Firebase Configuration (for Admin Authentication)
+   VITE_FIREBASE_API_KEY=your_firebase_api_key
+   VITE_FIREBASE_AUTH_DOMAIN=your_project_id.firebaseapp.com
+   VITE_FIREBASE_PROJECT_ID=your_project_id
+   VITE_FIREBASE_STORAGE_BUCKET=your_project_id.appspot.com
+   VITE_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+   VITE_FIREBASE_APP_ID=your_app_id
    ```
 
 4. **Start development servers**
@@ -175,7 +192,29 @@ npm run upload-csv
 
 # Clean database
 npm run clean-db
+
+# Create admin user
+npm run create-admin <admin-email>
 ```
+
+### Admin Setup
+
+To access admin features, you need to create an admin user with Firebase Authentication:
+
+1. **Create a Firebase user** in the Firebase Console or use the create-admin script:
+   ```bash
+   cd backend
+   npm run create-admin admin@example.com
+   ```
+
+2. **Configure Frontend Authentication**:
+   - The frontend uses Firebase Authentication to sign in admin users
+   - Admin users will have access to protected routes like `/admin/upload`
+
+3. **Admin Routes**:
+   - All admin routes require Firebase Authentication token
+   - The backend verifies the token and checks for admin role using custom claims
+   - Unauthorized access attempts are automatically rejected
 
 ## 📝 API Documentation
 
@@ -204,6 +243,23 @@ npm run clean-db
    GET /api/certificates/verify/:certificateId
    ```
 
+### Admin API Endpoints
+
+**Note**: All admin routes require Firebase Authentication token in the Authorization header.
+
+1. **Upload Volunteers (CSV)**
+   ```
+   POST /api/admin/upload-volunteers
+   Headers: { Authorization: Bearer <firebase-token> }
+   Body: FormData with CSV file
+   ```
+
+2. **Get Statistics**
+   ```
+   GET /api/admin/stats
+   Headers: { Authorization: Bearer <firebase-token> }
+   ```
+
 ## 🎨 Certificate Design
 
 Certificates feature:
@@ -222,6 +278,9 @@ Certificates feature:
 - Unique certificate IDs prevent duplication
 - Public verification URLs for authenticity checks
 - CORS protection on API endpoints
+- Firebase Authentication for admin routes
+- Role-based access control using Firebase custom claims
+- Rate limiting on API endpoints
 
 ## 📄 License
 
