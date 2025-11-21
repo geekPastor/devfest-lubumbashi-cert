@@ -56,6 +56,19 @@ certification/
 │   │   ├── routes/       # API routes
 │   │   ├── services/     # Business logic
 │   │   └── scripts/      # Utility scripts
+│   ├── assets/           # Certificate design assets
+│   │   ├── badge.png     # DevFest badge
+│   │   ├── logo.png      # GDG Ado-Ekiti logo
+│   │   ├── sample.png    # Volunteer certificate sample
+│   │   ├── signature.png # Digital signature
+│   │   └── speaker/      # Speaker certificate assets
+│   │       ├── angle.png
+│   │       ├── colli.png
+│   │       ├── hash.png
+│   │       ├── infinity.png
+│   │       ├── logo.png
+│   │       ├── signature.png
+│   │       └── speaker.png
 │   └── package.json
 │
 └── README.md
@@ -262,14 +275,43 @@ To access admin features, you need to create an admin user with Firebase Authent
 
 ## 🎨 Certificate Design
 
-Certificates feature:
+### Certificate Types
+
+The system supports two types of certificates:
+
+#### Volunteer Certificates
+Located in `backend/assets/`:
+- **badge.png** - DevFest 2025 badge
+- **logo.png** - GDG Ado-Ekiti logo
+- **sample.png** - Sample volunteer certificate design
+- **signature.png** - Digital signature for authentication
+
+#### Speaker Certificates
+Located in `backend/assets/speaker/`:
+- **speaker.png** - Speaker badge/icon
+- **angle.png** - Decorative design element
+- **colli.png** - Decorative design element
+- **hash.png** - Decorative design element
+- **infinity.png** - Decorative design element
+- **logo.png** - GDG Ado-Ekiti logo
+- **signature.png** - Digital signature for authentication
+
+### Certificate Features
 - Google's 4-color branding (Blue, Red, Yellow, Green)
-- Volunteer/Speaker name
-- Unique certificate ID
+- Volunteer/Speaker name (customizable before generation)
+- Unique certificate ID (e.g., DFAE2025-VOL-0001 or DFAE2025-SPK-0001)
 - Issue date
 - GDG Ado-Ekiti branding
 - Public verification URL
 - Digital signature
+
+### Customizing Certificates
+
+To customize the certificate design:
+1. Replace the asset files in `backend/assets/` (for volunteers) or `backend/assets/speaker/` (for speakers)
+2. Maintain the same file names and dimensions for proper rendering
+3. Supported formats: PNG with transparency recommended
+4. The certificate generation service (`backend/src/services/certificate.service.ts`) uses these assets to create certificates dynamically
 
 ## 🔐 Security
 
