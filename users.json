@@ -1,0 +1,25 @@
+{"users": [
+{
+  "localId": "RSmpMxAMPHV571hMB92QNy9DFnk1",
+  "email": "stontmedia@gmail.com",
+  "emailVerified": true,
+  "passwordHash": "P3CfqPgcRELCUQdBAbRqVjXhF6qBVACJ0fsP87u9Y1K7df68z3pDtEh5+/KeTXx3eff9u2xBnOxLitDxxoOo5A==",
+  "salt": "LSxS/i/IILUc3w==",
+  "lastSignedInAt": "1763654919898",
+  "createdAt": "1763651985632",
+  "disabled": false,
+  "customAttributes": "{\"role\":\"admin\"}",
+  "providerUserInfo": []
+},
+{
+  "localId": "SJVtePslUuQHtz5XTqpy3FikWMd2",
+  "email": "admin@gdgadoekiti.com",
+  "emailVerified": true,
+  "passwordHash": "+hDxNLIjqD/5u7ImdEGW2F8twTx+dI0ppSaISjJWEb/wTcxXTXCB6uOS5UDX7PK8QhsuSMGefmkEAUYYAXvMiA==",
+  "salt": "Lcwr9xozuQ4+aQ==",
+  "lastSignedInAt": "1763657110634",
+  "createdAt": "1763655897911",
+  "disabled": false,
+  "customAttributes": "{\"role\":\"admin\"}",
+  "providerUserInfo": []
+}]}
