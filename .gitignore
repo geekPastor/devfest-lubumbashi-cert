@@ -35,3 +35,6 @@ backend/output.png
 backend/nul
 nul
 mongodb.msi
+
+# Project documentation
+PROJECT_INFO.md
