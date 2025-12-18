@@ -1,4 +1,3 @@
-# Backend on Firebase App Hosting (Cloud Run)
 runConfig:
   minInstances: 0
   maxInstances: 10
@@ -6,9 +5,11 @@ runConfig:
   cpu: 1
   memoryMiB: 512
 
-# Build & start commands
 scripts:
-  buildCommand: npm ci && npm run build
+  # Build dans le dossier backend (npm ci + tsc)
+  buildCommand: npm ci --no-fund --no-audit && npm run build
+
+  # Start Cloud Run/App Hosting (doit écouter process.env.PORT)
   runCommand: npm run start
 
 env:
@@ -16,26 +17,22 @@ env:
     value: production
     availability: [RUNTIME]
 
-  # CORS: autorise ton frontend prod (tu ajusteras quand tu auras l’URL Hosting)
-  - variable: CORS_ORIGIN
-    value: https://gdgl-shigenerator.web.app/
+  # CORS / Frontend prod (ajoute aussi firebaseapp.com si besoin)
+  - variable: CORS_ORIGINS
+    value: https://gdgl-shigenerator.web.app,https://gdgl-shigenerator.firebaseapp.com
     availability: [RUNTIME]
 
   - variable: FRONTEND_URL
-    value: https://gdgl-shigenerator.web.app/
+    value: https://gdgl-shigenerator.web.app
     availability: [RUNTIME]
 
-  # Secrets (Cloud Secret Manager)
+  # Secrets (à créer avec firebase apphosting:secrets:set ...)
   - variable: JWT_SECRET
     secret: JWT_SECRET
     availability: [RUNTIME]
 
   - variable: EMAIL_PASS
     secret: EMAIL_PASS
-    availability: [RUNTIME]
-
-  - variable: FIREBASE_PROJECT_ID
-    value: gdgl-shigenerator
     availability: [RUNTIME]
 
   - variable: FIREBASE_CLIENT_EMAIL

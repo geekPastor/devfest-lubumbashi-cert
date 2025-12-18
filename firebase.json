@@ -37,6 +37,17 @@
         "functions"
       ],
       "alwaysDeployFromSource": true
+    },
+    {
+      "backendId": "gdg-certificat",
+      "rootDir": "backend",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "functions"
+      ]
     }
   ]
 }
