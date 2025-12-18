@@ -16,18 +16,18 @@ class EmailService {
 
   async sendVerificationCode(email: string, code: string): Promise<void> {
     const mailOptions = {
-      from: `"GDG Ado-Ekiti" <${config.email.user}>`,
+      from: `"GDG Lubumbashi" <${config.email.user}>`,
       to: email,
-      subject: 'DevFest Ado-Ekiti 2025 - Verification Code',
+      subject: 'DevFest Lubumbashi 2025 - Code de vérification',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <h2 style="color: #4285F4;">DevFest Ado-Ekiti 2025</h2>
+          <h2 style="color: #4285F4;">DevFest Lubumbashi 2025</h2>
           <p>Hello,</p>
-          <p>Your verification code for the DevFest Ado-Ekiti 2025 Certificate System is:</p>
+          <p>Votre code de vérification pour le système de certification DevFest Lubumbashi 2025 est :</p>
           <h1 style="color: #4285F4; font-size: 32px; letter-spacing: 5px;">${code}</h1>
-          <p>This code will expire in 15 minutes.</p>
-          <p>If you didn't request this code, please ignore this email.</p>
-          <p>Best regards,<br>GDG Ado-Ekiti Team</p>
+          <p>Ce code expirera dans 15 minutes.</p>
+          <p>Si vous n'avez pas demandé ce code, veuillez ignorer cet e-mail.</p>
+          <p>Cordialement,<br>Équipe GDG Lubumbashi</p>
         </div>
       `
     };
@@ -44,15 +44,15 @@ class EmailService {
   ): Promise<void> {
     // Customize message based on type
     const roleText = type === 'speaker' ? 'speaking' : 'volunteering';
-    const roleTitle = type === 'speaker' ? 'Speaker' : 'Volunteer';
+    const roleTitle = type === 'speaker' ? 'Intervenant' : 'Volontaire';
     const thankYouMessage = type === 'speaker'
-      ? `Thank you for speaking at DevFest Ado-Ekiti 2025! Your contribution as a speaker has inspired and educated our community.`
-      : `Thank you for volunteering at DevFest Ado-Ekiti 2025! Your dedication and hard work made this event possible.`;
+      ? `Merci d'avoir pris la parole lors du DevFest Lubumbashi 2025 ! Votre contribution en tant qu'intervenant a inspiré et enrichi notre communauté.`
+      : `Merci d'avoir participé en tant que volontaire au DevFest Lubumbashi 2025 ! Votre dévouement et votre travail acharné ont rendu cet événement possible.`;
 
     const mailOptions = {
-      from: `"GDG Ado-Ekiti" <${config.email.user}>`,
+      from: `"GDG Lubumbashi" <${config.email.user}>`,
       to: email,
-      subject: `DevFest Ado-Ekiti 2025 - Your ${roleTitle} Certificate`,
+      subject: `DevFest Lubumbashi 2025 - Votre certificat de ${roleTitle}`,
       html: `
         <!DOCTYPE html>
         <html>
@@ -80,7 +80,7 @@ class EmailService {
                         DevFest Ado-Ekiti 2025
                       </h1>
                       <p style="margin: 10px 0 0 0; color: #ffffff; font-size: 16px; opacity: 0.95;">
-                        Certificate of Appreciation - ${roleTitle}
+                        Certificat de reconnaissance - ${roleTitle}
                       </p>
                     </td>
                   </tr>
@@ -89,7 +89,7 @@ class EmailService {
                   <tr>
                     <td style="padding: 40px 30px;">
                       <h2 style="margin: 0 0 20px 0; color: #202124; font-size: 24px; font-weight: 600;">
-                        Hello ${name}!
+                        Bonjour ${name}!
                       </h2>
 
                       <p style="margin: 0 0 20px 0; color: #5f6368; font-size: 16px; line-height: 1.6;">
@@ -108,7 +108,7 @@ class EmailService {
                               <tr>
                                 <td style="border-radius: 6px; background: linear-gradient(135deg, #4285F4, #5396F5); box-shadow: 0 2px 4px rgba(66,133,244,0.3);">
                                   <a href="${certificateUrl}" style="display: block; padding: 14px 20px; color: #ffffff; text-decoration: none; font-weight: 600; font-size: 16px; text-align: center;">
-                                    📥 Download Certificate
+                                    📥 Télécharger le certificat
                                   </a>
                                 </td>
                               </tr>
@@ -121,7 +121,7 @@ class EmailService {
                               <tr>
                                 <td style="border-radius: 6px; background: linear-gradient(135deg, #34A853, #45B862); box-shadow: 0 2px 4px rgba(52,168,83,0.3);">
                                   <a href="${verificationUrl}" style="display: block; padding: 14px 20px; color: #ffffff; text-decoration: none; font-weight: 600; font-size: 16px; text-align: center;">
-                                    🔍 View Verification Page
+                                    🔍 Afficher la page de vérification
                                   </a>
                                 </td>
                               </tr>
@@ -135,19 +135,19 @@ class EmailService {
                         <tr>
                           <td>
                             <p style="margin: 0 0 10px 0; color: #5f6368; font-size: 14px; line-height: 1.6;">
-                              <strong style="color: #202124;">💡 Quick Tip:</strong> Share your certificate on LinkedIn to showcase your contribution! Visit the verification page to add it to your professional profile.
+                              <strong style="color: #202124;">💡 Astuce rapide :</strong> partagez votre certificat sur LinkedIn pour mettre en avant votre contribution ! Rendez-vous sur la page de vérification pour l'ajouter à votre profil professionnel.
                             </p>
                           </td>
                         </tr>
                       </table>
 
                       <p style="margin: 0 0 10px 0; color: #5f6368; font-size: 16px; line-height: 1.6;">
-                        We appreciate your contribution to making DevFest Ado-Ekiti 2025 a memorable and successful event!
+                        Nous apprécions votre contribution à la réalisation d'un DevFest Lubumbashi 2025 mémorable et réussi !
                       </p>
 
                       <p style="margin: 20px 0 0 0; color: #5f6368; font-size: 16px; line-height: 1.6;">
-                        <strong style="color: #202124;">Best regards,</strong><br>
-                        <span style="color: #4285F4; font-weight: 600;">GDG Ado-Ekiti Team</span>
+                        <strong style="color: #202124;">Cordialement,</strong><br>
+                        <span style="color: #4285F4; font-weight: 600;">Équipe du GDG Lubumbashi</span>
                       </p>
                     </td>
                   </tr>
@@ -156,13 +156,13 @@ class EmailService {
                   <tr>
                     <td style="background-color: #f8f9fa; padding: 30px; text-align: center; border-top: 1px solid #e8eaed;">
                       <p style="margin: 0 0 10px 0; color: #5f6368; font-size: 14px;">
-                        <strong style="color: #202124;">GDG Ado-Ekiti</strong>
+                        <strong style="color: #202124;">GDG Lubumbashi</strong>
                       </p>
                       <p style="margin: 0 0 15px 0; color: #80868b; font-size: 12px; line-height: 1.5;">
                         Building the future of technology together
                       </p>
                       <p style="margin: 0; color: #80868b; font-size: 12px;">
-                        This email was sent regarding your participation in DevFest Ado-Ekiti 2025
+                        Cet e-mail vous est envoyé au sujet de votre participation au DevFest Lubumbashi 2025.
                       </p>
                     </td>
                   </tr>

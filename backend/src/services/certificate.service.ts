@@ -177,7 +177,7 @@ class CertificateService {
   }
 
   private async createSpeakerCertificate(volunteerName: string, certificateId: string): Promise<{ imageBuffer: Buffer; imageUrl: string }> {
-    const issueDate = 'November 15, 2025';
+    const issueDate = 'le 20 décembre 2025';
 
     try {
       // Load speaker-specific assets
@@ -323,7 +323,7 @@ class CertificateService {
     }
 
     // Default volunteer certificate
-    const issueDate = 'November 15, 2025';
+    const issueDate = 'le 20 décembre 2025';
 
     try {
       // Load assets
