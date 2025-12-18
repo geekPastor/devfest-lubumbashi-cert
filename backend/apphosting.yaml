@@ -18,11 +18,11 @@ env:
 
   # CORS: autorise ton frontend prod (tu ajusteras quand tu auras l’URL Hosting)
   - variable: CORS_ORIGIN
-    value: https://TON_FRONTEND.web.app
+    value: https://gdgl-shigenerator.web.app/
     availability: [RUNTIME]
 
   - variable: FRONTEND_URL
-    value: https://TON_FRONTEND.web.app
+    value: https://gdgl-shigenerator.web.app/
     availability: [RUNTIME]
 
   # Secrets (Cloud Secret Manager)
