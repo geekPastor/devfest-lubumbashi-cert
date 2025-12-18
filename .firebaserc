@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "devfestcert"
-  }
+    "default": "gdgl-shigenerator",
+    "devfestcert": "gdgl-shigenerator"
+  },
+  "targets": {},
+  "etags": {}
 }
