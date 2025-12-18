@@ -91,7 +91,8 @@ app.use(notFound);
 app.use(errorHandler);
 
 // Start server: Cloud Run/App Hosting fournit PORT
-const port = Number(process.env.PORT) || config.port || 5000;
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+const port = Number(process.env.PORT) || 8080;
+
+app.listen(port, "0.0.0.0", () => {
+  console.log(`[boot] listening on ${port}`);
 });
