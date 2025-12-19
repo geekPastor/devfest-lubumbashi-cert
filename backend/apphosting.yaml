@@ -30,7 +30,10 @@ env:
     secret: JWT_SECRET
     availability: [RUNTIME]
   
-  
+  - variable: EMAIL_SERVICE
+    value: gmail
+    availability: [RUNTIME]
+
   - variable: EMAIL_USER
     value: chrinovic.mm@gmail.com
     availability: [RUNTIME]
@@ -46,4 +49,8 @@ env:
 
   - variable: FIREBASE_PRIVATE_KEY
     secret: FIREBASE_PRIVATE_KEY
+    availability: [RUNTIME]
+
+  - variable: LINKEDIN_CLIENT_ID
+    value: 77lu58jsjfjm4z
     availability: [RUNTIME]
