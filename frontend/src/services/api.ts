@@ -1,14 +1,14 @@
 import axios from 'axios';
 import { auth } from '../firebase';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const baseURL =
+  (import.meta.env.VITE_API_URL || "").replace(/\/+$/, "") ||
+  "http://localhost:5000";
 
-const api = axios.create({
-  baseURL: API_URL,
-  headers: {
-    'Content-Type': 'application/json',
-  },
+export const api = axios.create({
+  baseURL,
 });
+
 
 api.interceptors.request.use(async (config) => {
   if (auth) {
