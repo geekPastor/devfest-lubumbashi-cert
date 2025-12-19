@@ -47,8 +47,15 @@ const parseCorsOrigins = (value?: string): string[] => {
 
 const normalizeFirebasePrivateKey = (key?: string) => {
   if (!key) return "";
-  // Si la clé est stockée avec \n dans les env vars, on remet des vraies nouvelles lignes
-  return key.replace(/\\n/g, "\n");
+
+  // enlève guillemets éventuels
+  let k = key.trim();
+  k = k.replace(/^"(.*)"$/, "$1").replace(/^'(.*)'$/, "$1");
+
+  // remet les vraies newlines + nettoie \r
+  k = k.replace(/\\n/g, "\n").replace(/\r/g, "");
+
+  return k;
 };
 
 const isProduction = process.env.NODE_ENV === "production";
