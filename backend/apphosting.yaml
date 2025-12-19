@@ -17,7 +17,6 @@ env:
     value: production
     availability: [RUNTIME]
 
-  # CORS / Frontend prod (ajoute aussi firebaseapp.com si besoin)
   - variable: CORS_ORIGINS
     value: https://gdgl-shigenerator.web.app,https://gdgl-shigenerator.firebaseapp.com
     availability: [RUNTIME]
@@ -30,6 +29,12 @@ env:
   - variable: JWT_SECRET
     secret: JWT_SECRET
     availability: [RUNTIME]
+  
+  
+  - variable: EMAIL_USER
+    value: chrinovic.mm@gmail.com
+    availability: [RUNTIME]
+
 
   - variable: EMAIL_PASS
     secret: EMAIL_PASS
