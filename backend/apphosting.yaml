@@ -3,13 +3,10 @@ runConfig:
   maxInstances: 10
   concurrency: 80
   cpu: 1
-  memoryMiB: 512
+  memoryMiB: 1024
 
 scripts:
-  # Build dans le dossier backend (npm ci + tsc)
   buildCommand: npm ci --no-fund --no-audit && npm run build
-
-  # Start Cloud Run/App Hosting (doit écouter process.env.PORT)
   runCommand: npm run start
 
 env:
@@ -25,32 +22,47 @@ env:
     value: https://gdgl-shigenerator.web.app
     availability: [RUNTIME]
 
-  # Secrets (à créer avec firebase apphosting:secrets:set ...)
+  # REQUIRED by config.ts
+  - variable: FIREBASE_PROJECT_ID
+    value: gdgl-shigenerator
+    availability: [RUNTIME]
+
+  # REQUIRED by config.ts
   - variable: JWT_SECRET
     secret: JWT_SECRET
     availability: [RUNTIME]
-  
+
+  # REQUIRED by config.ts
   - variable: EMAIL_SERVICE
     value: gmail
     availability: [RUNTIME]
 
+  # REQUIRED by config.ts
   - variable: EMAIL_USER
     value: chrinovic.mm@gmail.com
     availability: [RUNTIME]
 
-
+  # REQUIRED by config.ts
   - variable: EMAIL_PASS
     secret: EMAIL_PASS
     availability: [RUNTIME]
 
+  # REQUIRED by config.ts
   - variable: FIREBASE_CLIENT_EMAIL
     secret: FIREBASE_CLIENT_EMAIL
     availability: [RUNTIME]
 
+  # REQUIRED by config.ts
   - variable: FIREBASE_PRIVATE_KEY
     secret: FIREBASE_PRIVATE_KEY
     availability: [RUNTIME]
 
+  # Optional (only needed if your LinkedIn routes are used)
   - variable: LINKEDIN_CLIENT_ID
     value: 77lu58jsjfjm4z
     availability: [RUNTIME]
+
+  # (optional) if you use it anywhere
+  # - variable: LINKEDIN_CLIENT_SECRET
+  #   secret: LINKEDIN_CLIENT_SECRET
+  #   availability: [RUNTIME]
