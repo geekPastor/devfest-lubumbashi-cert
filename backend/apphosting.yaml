@@ -15,11 +15,11 @@ env:
     availability: [RUNTIME]
 
   - variable: CORS_ORIGINS
-    value: https://devfest-lubumbashi-cert.vercel.app/,https://devfest-lubumbashi-cert.onrender.com/
+    value: https://devfest-lubumbashi-cert.vercel.app,https://devfest-lubumbashi-cert.onrender.com
     availability: [RUNTIME]
 
   - variable: FRONTEND_URL
-    value: https://devfest-lubumbashi-cert.vercel.app/
+    value: https://devfest-lubumbashi-cert.vercel.app
     availability: [RUNTIME]
 
   # REQUIRED by config.ts
