@@ -23,27 +23,23 @@ app.use(express.json());
  * - réutilise les mêmes options pour app.use + app.options
  * - renvoie une erreur claire si origin non autorisée (au lieu de "callback(null,false)" silencieux)
  */
+
 const corsOptions: CorsOptions = {
   origin: (origin, callback) => {
-    // Allow requests with no origin (server-to-server, curl, Postman)
     if (!origin) return callback(null, true);
 
-    // Normalize (au cas où tu as des espaces dans env/config)
-    const allowed = (config.corsOrigins || []).map((o) => o.trim()).filter(Boolean);
-
-    if (allowed.includes(origin)) {
+    if (config.corsOrigins.includes(origin)) {
       return callback(null, true);
     }
 
+    // IMPORTANT: retourner une erreur explicite aide au debug
     return callback(new Error(`CORS blocked for origin: ${origin}`));
   },
-  credentials: true, // mets false si tu n'utilises pas cookies/sessions
-  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,
 };
 
-// CORS doit venir avant tout le reste
 app.use(cors(corsOptions));
+
 
 // IMPORTANT: preflight (OPTIONS) doit utiliser la même config
 app.options("*", cors(corsOptions));
@@ -91,7 +87,7 @@ app.use(notFound);
 app.use(errorHandler);
 
 // Start server: Cloud Run/App Hosting fournit PORT
-const port = Number(process.env.PORT) || 50000;
+const port = Number(process.env.PORT) || 8080;
 
 app.listen(port, "0.0.0.0", () => {
   console.log(`[boot] listening on ${port}`);
