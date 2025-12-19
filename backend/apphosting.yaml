@@ -3,66 +3,54 @@ runConfig:
   maxInstances: 10
   concurrency: 80
   cpu: 1
-  memoryMiB: 1024
+  memoryMiB: 512
 
 scripts:
-  buildCommand: npm ci --no-fund --no-audit && npm run build
-  runCommand: npm run start
+  # build du backend
+  buildCommand: cd backend && npm ci --include=dev --no-fund --no-audit && npm run build
+  # démarrage du backend (doit écouter process.env.PORT)
+  runCommand: cd backend && npm run start
 
 env:
   - variable: NODE_ENV
     value: production
     availability: [RUNTIME]
 
+  # IMPORTANT: ajoute TON domaine firebase hosting
   - variable: CORS_ORIGINS
-    value: https://devfest-lubumbashi-cert.vercel.app,https://devfest-lubumbashi-cert.onrender.com
+    value: https://gdgl-shigenerator.web.app,https://gdgl-shigenerator.firebaseapp.com
     availability: [RUNTIME]
 
   - variable: FRONTEND_URL
-    value: https://devfest-lubumbashi-cert.vercel.app
+    value: https://gdgl-shigenerator.web.app
     availability: [RUNTIME]
 
-  # REQUIRED by config.ts
-  - variable: FIREBASE_PROJECT_ID
-    value: gdgl-shigenerator
-    availability: [RUNTIME]
-
-  # REQUIRED by config.ts
-  - variable: JWT_SECRET
-    secret: JWT_SECRET
-    availability: [RUNTIME]
-
-  # REQUIRED by config.ts
+  # tu peux mettre les non-secrets en value, et les secrets en secret
   - variable: EMAIL_SERVICE
     value: gmail
     availability: [RUNTIME]
 
-  # REQUIRED by config.ts
   - variable: EMAIL_USER
     value: chrinovic.mm@gmail.com
     availability: [RUNTIME]
 
-  # REQUIRED by config.ts
+  # Exemples secrets (tu dois les créer dans GCP Secret Manager ou via console Firebase si dispo)
+  - variable: JWT_SECRET
+    secret: JWT_SECRET
+    availability: [RUNTIME]
+
   - variable: EMAIL_PASS
     secret: EMAIL_PASS
     availability: [RUNTIME]
 
-  # REQUIRED by config.ts
+  - variable: FIREBASE_PROJECT_ID
+    value: gdgl-shigenerator
+    availability: [RUNTIME]
+
   - variable: FIREBASE_CLIENT_EMAIL
     secret: FIREBASE_CLIENT_EMAIL
     availability: [RUNTIME]
 
-  # REQUIRED by config.ts
   - variable: FIREBASE_PRIVATE_KEY
     secret: FIREBASE_PRIVATE_KEY
     availability: [RUNTIME]
-
-  # Optional (only needed if your LinkedIn routes are used)
-  - variable: LINKEDIN_CLIENT_ID
-    value: 77lu58jsjfjm4z
-    availability: [RUNTIME]
-
-  # (optional) if you use it anywhere
-  # - variable: LINKEDIN_CLIENT_SECRET
-  #   secret: LINKEDIN_CLIENT_SECRET
-  #   availability: [RUNTIME]

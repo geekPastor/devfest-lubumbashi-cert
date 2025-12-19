@@ -120,28 +120,43 @@ export const uploadVolunteers = async (req: Request, res: Response) => {
   }
 };
 
+
 export const getVolunteersStats = async (req: Request, res: Response) => {
   try {
-    // Get all volunteers
     const volunteers = await Volunteer.findAll();
 
-    const stats = {
-      total: volunteers.length,
-      volunteers: volunteers.filter((v: any) => v.type === 'volunteer' || !v.type).length,
-      speakers: volunteers.filter((v: any) => v.type === 'speaker').length,
-      certified: volunteers.filter((v: any) => v.certificateId).length,
-      pending: volunteers.filter((v: any) => !v.certificateId).length
-    };
+    const total = volunteers.length;
 
-    res.status(200).json({
+    const volunteersCount = volunteers.filter(
+      (v: any) => v.type === "volunteer" || !v.type
+    ).length;
+
+    const speakersCount = volunteers.filter((v: any) => v.type === "speaker").length;
+
+    const certifiedCount = volunteers.filter((v: any) => {
+      // selon ton modèle, certificateId peut être string / null / undefined
+      return typeof v.certificateId === "string" && v.certificateId.trim().length > 0;
+    }).length;
+
+    const pendingCount = total - certifiedCount;
+
+    return res.status(200).json({
       success: true,
-      data: stats
+      data: {
+        total,
+        volunteers: volunteersCount,
+        speakers: speakersCount,
+        certified: certifiedCount,
+        pending: pendingCount,
+      },
     });
-  } catch (error) {
-    console.error('Error fetching stats:', error);
-    res.status(500).json({
+  } catch (error: any) {
+    console.error("Error fetching stats:", error);
+    return res.status(500).json({
       success: false,
-      error: 'Error fetching statistics'
+      error: "Error fetching statistics",
+      details: error?.message,
     });
   }
 };
+

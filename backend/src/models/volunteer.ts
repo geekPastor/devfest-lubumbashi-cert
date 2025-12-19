@@ -4,16 +4,19 @@ import { IVolunteer } from './interfaces';
 class VolunteerModel {
   private collection = db.collection('volunteers');
 
-  async findOne(filter: Partial<IVolunteer>): Promise<IVolunteer | null> {
-    const snapshot = await this.collection.where('email', '==', filter.email).get();
+    async findOne(filter: Partial<IVolunteer>): Promise<IVolunteer | null> {
+    if (!filter.email) return null;
+
+    const snapshot = await this.collection.where("email", "==", filter.email).limit(1).get();
     if (snapshot.empty) return null;
 
     const doc = snapshot.docs[0];
     return {
       id: doc.id,
-      ...doc.data() as IVolunteer
+      ...(doc.data() as IVolunteer),
     };
-  }
+  } 
+
 
   async findById(id: string): Promise<IVolunteer | null> {
     const doc = await this.collection.doc(id).get();
