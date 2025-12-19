@@ -11,10 +11,17 @@
     "build:frontend": "cd frontend && npm run build",
     "build:backend": "cd backend && npm run build"
   },
-  "keywords": ["devfest", "certificate", "gdg"],
+  "keywords": [
+    "devfest",
+    "certificate",
+    "gdg"
+  ],
   "author": "GDG Ado-Ekiti",
   "license": "MIT",
   "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/multer": "^2.0.0",
+    "@types/nodemailer": "^7.0.4",
     "concurrently": "^8.2.2"
   }
 }
