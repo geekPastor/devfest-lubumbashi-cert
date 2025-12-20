@@ -1,48 +1,25 @@
-import * as admin from 'firebase-admin';
-import { config } from '../config';
-import dotenv from 'dotenv';
+import admin from "firebase-admin";
+import { config } from "../config";
 
-dotenv.config({ path: '../../.env' });
+const hasServiceAccount =
+  !!config.firebase.projectId &&
+  !!config.firebase.clientEmail &&
+  !!config.firebase.privateKey;
 
 if (!admin.apps.length) {
-  admin.initializeApp({
-    credential: admin.credential.cert({
-      projectId: config.firebase.projectId,
-      clientEmail: config.firebase.clientEmail,
-      privateKey: config.firebase.privateKey.replace(/\\n/g, '\n'),
-    }),
-    databaseURL: `https://${config.firebase.projectId}.firebaseio.com`,
-    storageBucket: process.env.STORAGE_BUCKET || 'devfestcert.firebasestorage.app',
-  });
-}
-
-const auth = admin.auth();
-
-const createAdmin = async (email: string) => {
-  try {
-    const user = await auth.getUserByEmail(email);
-    await auth.setCustomUserClaims(user.uid, { role: 'admin' });
-    console.log(`Successfully created admin user for ${email}`);
-  } catch (error) {
-    if (error && typeof error === 'object' && 'code' in error && error.code === 'auth/user-not-found') {
-      const user = await auth.createUser({
-        email,
-        emailVerified: true,
-      });
-      await auth.setCustomUserClaims(user.uid, { role: 'admin' });
-      console.log(`Successfully created admin user for ${email}`);
-    } else {
-      console.error(error);
-    }
+  if (hasServiceAccount) {
+    admin.initializeApp({
+      credential: admin.credential.cert({
+        projectId: config.firebase.projectId!,
+        clientEmail: config.firebase.clientEmail!,
+        privateKey: config.firebase.privateKey!, // ✅ safe grâce au guard
+      }),
+    });
+  } else {
+    // Sur Cloud Run/App Hosting: ADC
+    admin.initializeApp({
+      credential: admin.credential.applicationDefault(),
+      projectId: config.firebase.projectId || process.env.GCLOUD_PROJECT,
+    });
   }
-};
-
-const email = process.argv[2];
-if (!email) {
-  console.error('Please provide an email address');
-  process.exit(1);
 }
-
-createAdmin(email);
-
-//Geek+Pastor

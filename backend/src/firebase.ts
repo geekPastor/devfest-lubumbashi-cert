@@ -1,52 +1,62 @@
 import admin from "firebase-admin";
+import { config } from "./config";
 
-// ... ton init()
-
-export const db = admin.firestore();
-export const auth = admin.auth();
-
-// ✅ AJOUTE ÇA :
-export const storage = admin.storage();
-
-
-const isRunningOnGCP =
-  !!process.env.K_SERVICE || // Cloud Run
-  !!process.env.GOOGLE_CLOUD_PROJECT;
-
-function init() {
-  if (admin.apps.length) return;
-
-  // 1) Sur Cloud Run / Firebase App Hosting => Application Default Credentials
-  if (isRunningOnGCP) {
-    admin.initializeApp();
-    return;
+/**
+ * Récupère le storageBucket depuis :
+ * - FIREBASE_STORAGE_BUCKET (si tu le fournis)
+ * - FIREBASE_CONFIG (json fourni par Firebase / App Hosting)
+ * - fallback: `${projectId}.appspot.com` (classique)
+ */
+function resolveStorageBucket(): string | undefined {
+  if (process.env.FIREBASE_STORAGE_BUCKET?.trim()) {
+    return process.env.FIREBASE_STORAGE_BUCKET.trim();
   }
 
-  // 2) Local / hors GCP => via variables d'env
-  const projectId = process.env.FIREBASE_PROJECT_ID;
-  const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
-  const privateKeyRaw = process.env.FIREBASE_PRIVATE_KEY;
-
-  if (!projectId || !clientEmail || !privateKeyRaw) {
-    throw new Error(
-      "Firebase Admin not configured. Set FIREBASE_PROJECT_ID, FIREBASE_CLIENT_EMAIL, FIREBASE_PRIVATE_KEY for local dev."
-    );
+  // Sur Firebase App Hosting, FIREBASE_CONFIG existe souvent
+  const raw = process.env.FIREBASE_CONFIG;
+  if (raw) {
+    try {
+      const parsed = JSON.parse(raw);
+      if (parsed?.storageBucket) return String(parsed.storageBucket);
+    } catch {
+      // ignore
+    }
   }
 
-  const privateKey = privateKeyRaw
-    .trim()
-    .replace(/^"(.*)"$/, "$1")
-    .replace(/^'(.*)'$/, "$1")
-    .replace(/\\n/g, "\n")
-    .replace(/\r/g, "");
+  // Fallback "classique" pour Firebase Storage
+  const projectId = config.firebase.projectId || process.env.GCLOUD_PROJECT;
+  if (projectId) return `${projectId}.appspot.com`;
 
-  admin.initializeApp({
-    credential: admin.credential.cert({
-      projectId,
-      clientEmail,
-      privateKey,
-    }),
-  });
+  return undefined;
 }
 
-init();
+if (!admin.apps.length) {
+  const storageBucket = resolveStorageBucket();
+
+  // Si secrets service account fournis -> cert()
+  if (config.firebase.clientEmail && config.firebase.privateKey) {
+    admin.initializeApp({
+      credential: admin.credential.cert({
+        projectId: config.firebase.projectId,
+        clientEmail: config.firebase.clientEmail,
+        privateKey: config.firebase.privateKey,
+      }),
+      storageBucket,
+    });
+  } else {
+    // Sinon -> Application Default Credentials (Cloud Run / App Hosting)
+    admin.initializeApp({
+      credential: admin.credential.applicationDefault(),
+      projectId: config.firebase.projectId || process.env.GCLOUD_PROJECT,
+      storageBucket,
+    });
+  }
+}
+
+export const db = admin.firestore();
+
+// ✅ Ce que ton code attendait :
+export const auth = admin.auth();
+
+// ✅ Pour storage.service.ts
+export const storage = admin.storage();
