@@ -1,35 +1,29 @@
-import axios from 'axios';
-import { auth } from '../firebase';
+import axios from "axios";
+import { auth } from "../firebase";
 
-const baseURL =
-  (import.meta.env.VITE_API_URL || "").replace(/\/+$/, "") ||
-  "http://localhost:5000";
+const raw = (import.meta.env.VITE_API_URL || "").trim();
+const baseURL = raw ? raw.replace(/\/+$/, "") : ""; // "" => same-origin
 
 export const api = axios.create({
   baseURL,
+  // withCredentials: true, // active seulement si tu utilises cookies/sessions
 });
 
-
 api.interceptors.request.use(async (config) => {
-  if (auth) {
-    const user = auth.currentUser;
-    if (user) {
-      const token = await user.getIdToken();
-      config.headers.Authorization = `Bearer ${token}`;
-    }
+  const user = auth?.currentUser;
+  if (user) {
+    const token = await user.getIdToken();
+    config.headers = config.headers ?? {};
+    config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
 });
 
 export const verifyEmail = async (email: string) => {
-  try {
-    const response = await api.post('/api/verify/email', { email });
-    return response.data;
-  } catch (error: any) {
-    console.error('API Error:', error.response?.data || error.message);
-    throw error;
-  }
+  const { data } = await api.post("/api/verify/email", { email });
+  return data;
 };
+
 
 export const verifyCode = async (email: string, code: string) => {
   const response = await api.post('/api/verify/code', { email, code });
